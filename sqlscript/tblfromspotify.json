@@ -1,0 +1,17 @@
+{
+	"name": "tblfromspotify",
+	"properties": {
+		"content": {
+			"query": "CREATE EXTERNAL FILE FORMAT trackCSV \nWITH (FORMAT_TYPE = DELIMITEDTEXT,\n      FORMAT_OPTIONS(\n          FIELD_TERMINATOR = ',',\n          STRING_DELIMITER = '\"',\n          FIRST_ROW = 2,\n          USE_TYPE_DEFAULT = True)\n);\n\n--https://riyalgen2.blob.core.windows.net/project2/Spotify.csv\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'trackData' )\n  CREATE EXTERNAL DATA SOURCE trackData \n  WITH (\n    LOCATION = 'abfss://bronze@riyalgen2.dfs.core.windows.net' \n  );\n\n  CREATE EXTERNAL TABLE trackTbl(\n   track_name VARCHAR(255),\n    artist_name VARCHAR(255),\n    artist_count INT,\n    released_year INT,\n    released_month INT,\n    released_day INT,\n    in_spotify_playlists INT,\n    in_spotify_charts INT,\n    streams VARCHAR(255), --ERROR SHOULD BE INT\n    in_apple_playlists INT,\n    in_apple_charts INT,\n    in_deezer_playlists  VARCHAR(255), --ERROR SHOULD BE INT\n    in_deezer_charts VARCHAR(255), --ERROR SHOULD BE INT\n    in_shazam_charts VARCHAR(255), --ERROR SHOULD BE INT\n    bpm INT,\n    \"key\" VARCHAR(10),\n    mode VARCHAR(255),\n    danceability_percent FLOAT,\n    valence_percent FLOAT,\n    energy_percent FLOAT,\n    acousticness_percent FLOAT,\n    instrumentalness_percent FLOAT,\n    liveness_percent FLOAT,\n    speechiness_percent FLOAT,\n    cover_url VARCHAR(255)\n)\nWITH (\n  LOCATION = 'Spoti*.csv',\n  DATA_SOURCE = trackData,\n  FILE_FORMAT = trackCSV\n);\nSELECT * from trackTbl\n\ndrop EXTERNAL TABLE trackTbl",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dbdatabase",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
