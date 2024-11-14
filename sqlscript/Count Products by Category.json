@@ -1,5 +1,5 @@
 {
-	"name": "Lab1",
+	"name": "Count Products by Category",
 	"properties": {
 		"content": {
 			"query": "SELECT \n    Category, COUNT(*) AS ProductCount\nFROM OPENROWSET(\n    BULK 'https://riyalgen2.dfs.core.windows.net/msllab/product_data/products.csv',\n    FORMAT = 'CSV',\n    PARSER_VERSION='2.0',\n    HEADER_ROW = TRUE\n) AS [result]\nGROUP BY Category;",
@@ -7,7 +7,7 @@
 				"language": "sql"
 			},
 			"currentConnection": {
-				"databaseName": "master",
+				"databaseName": "dbdatabase",
 				"poolName": "Built-in"
 			},
 			"resultLimit": 5000
